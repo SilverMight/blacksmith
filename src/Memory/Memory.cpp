@@ -6,18 +6,11 @@
 void Memory::allocate_memory(size_t mem_size) {
   this->size = mem_size;
   volatile char *target = nullptr;
-  FILE *fp;
 
   if (superpage) {
-    // allocate memory using super pages
-    fp = fopen(hugetlbfs_mountpoint.c_str(), "w+");
-    if (fp==nullptr) {
-      Logger::log_info(format_string("Could not mount superpage from %s. Error:", hugetlbfs_mountpoint.c_str()));
-      Logger::log_data(std::strerror(errno));
-      exit(EXIT_FAILURE);
-    }
+    // allocate memory using super pages without an explicit fd
     auto mapped_target = mmap((void *) start_address, MEM_SIZE, PROT_READ | PROT_WRITE,
-        MAP_SHARED | MAP_ANONYMOUS | MAP_HUGETLB | (30UL << MAP_HUGE_SHIFT), fileno(fp), 0);
+        MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB | (30UL << MAP_HUGE_SHIFT), -1, 0);
     if (mapped_target==MAP_FAILED) {
       perror("mmap");
       exit(EXIT_FAILURE);
