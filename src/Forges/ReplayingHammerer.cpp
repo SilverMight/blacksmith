@@ -170,6 +170,7 @@ void ReplayingHammerer::replay_patterns(const std::string& json_filename,
       {"bitflips_per_round", replay_data.bitflips_per_round},
       {"rounds", FIXED_REPLAY_ROUNDS}
     };
+    experiments.push_back(experiment);
 #endif
 
     // store information gathered during repeatability experiment
