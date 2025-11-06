@@ -114,7 +114,9 @@ void ReplayingHammerer::replay_patterns(const std::string& json_filename,
   // load all patterns from file
   auto loaded_patterns = load_patterns_from_json(json_filename, pattern_ids);
 
-  for (auto &patt : loaded_patterns | std::views::take(REPEATABILITY_MAX_NUM_PATTERNS)) {
+  size_t patterns_analyzed = 0;
+
+  for (auto &patt : loaded_patterns) {
     Logger::log_debug("Calling determine_most_effective_mapping");
     // extract the mapping that was most effective during the fuzzing run
     auto &mapper = determine_most_effective_mapping(patt, false, true);
@@ -173,7 +175,9 @@ void ReplayingHammerer::replay_patterns(const std::string& json_filename,
     // store information gathered during repeatability experiment
     fixed_replay_data.insert(std::pair{mapper.get_instance_id(), std::move(replay_data)});
 
-
+    if(patterns_analyzed++ >= REPEATABILITY_MAX_NUM_PATTERNS) {
+      break;
+    }
   }
 
 #ifdef ENABLE_JSON

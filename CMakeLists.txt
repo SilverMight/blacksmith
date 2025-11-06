@@ -82,7 +82,7 @@ target_include_directories(
 target_compile_features(
         bs
         PUBLIC
-        cxx_std_20
+        cxx_std_17
 )
 
 target_compile_options(
