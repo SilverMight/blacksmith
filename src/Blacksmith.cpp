@@ -31,25 +31,18 @@ int check_cpu() {
   Logger::log_data(format_string("%s", cpu_model.c_str()));
 
   std::vector<std::string> supported_cpus = {
-      // Coffee Lake
-      "i5-8400",
-      "i5-8500",
-      "i5-8600",
-      "i5-9400",
-      "i5-9500",
-      "i5-9600",
-      "i7-8086",
-      "i7-8700",
-      "i7-9700",
-      "i7-9900"
+      // Comet Lake
+      "i9-10900"
   };
 
   bool cpu_supported = false;
-  for (const auto &model : supported_cpus) {
+  for (const auto &model : supported_cpus)
+  {
     cpu_supported |= (cpu_model.find(model) != std::string::npos);
   }
 
-  if (!cpu_supported) {
+  if (!cpu_supported)
+  {
     Logger::log_error("CPU model is not supported. You need to run DRAMA to update the DRAM address matrices. See the README.md for details.");
     exit(EXIT_FAILURE);
   }
