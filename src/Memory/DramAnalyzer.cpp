@@ -58,6 +58,11 @@ void DramAnalyzer::find_bank_conflicts() {
 void DramAnalyzer::find_targets(std::vector<volatile char *> &target_bank) {
   // create an unordered set of the addresses in the target bank for a quick lookup
   // std::unordered_set<volatile char*> tmp; tmp.insert(target_bank.begin(), target_bank.end());
+
+  // fix: prevent crash w/ floating point error if the target bank is empty
+  // May require more investigation for root cause
+  if(target_bank.empty()) return;
+
   std::unordered_set<volatile char *> tmp(target_bank.begin(), target_bank.end());
   target_bank.clear();
   size_t num_repetitions = 5;
